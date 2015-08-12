@@ -1,10 +1,10 @@
 var expect = require('chai').expect,
-	sinon = require('sinon');
+	sinon = require('sinon'),
 
-var board = require('../src/board');
+	board = require('../src/board');
 
-describe('Function "createEmptyTable"', function() {
-	it('should create two dimensional table with proper size', function() {
+describe('Function "createEmptyTable"', function () {
+	it('should create two dimensional table with proper size', function () {
 		var size = 3,
 			table = board.createEmptyTable(size);
 
@@ -13,7 +13,7 @@ describe('Function "createEmptyTable"', function() {
 	});
 });
 
-describe('Function "eachSegmentField"', function() {
+describe('Function "eachSegmentField"', function () {
 	var segmentHorizontal = {
 		x: 1, y: 2, size: 2,
 		orientation: board.ORIENTATION.HORIZONTAL
@@ -22,7 +22,7 @@ describe('Function "eachSegmentField"', function() {
 		orientation: board.ORIENTATION.VERTICAL
 	};
 
-	it('should execute function on each field position on horizontal segment', function() {
+	it('should execute function on each field position on horizontal segment', function () {
 		var spy = sinon.spy();
 
 		board.eachSegmentField(segmentHorizontal, spy);
@@ -31,7 +31,7 @@ describe('Function "eachSegmentField"', function() {
 		expect(spy.secondCall.calledWithExactly(2, 2)).to.be.true;
 	});
 
-	it('should execute function on each field position on vertical segment', function() {
+	it('should execute function on each field position on vertical segment', function () {
 		var spy = sinon.spy();
 
 		board.eachSegmentField(segmentVertical, spy);
@@ -40,8 +40,8 @@ describe('Function "eachSegmentField"', function() {
 		expect(spy.secondCall.calledWithExactly(1, 3)).to.be.true;
 	});
 
-	it('should terminate executing callback when one returns false', function() {
-		var spy = sinon.spy(function() {
+	it('should terminate executing callback when one returns false', function () {
+		var spy = sinon.spy(function () {
 			return false;
 		});
 
