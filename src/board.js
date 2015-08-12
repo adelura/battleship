@@ -1,18 +1,20 @@
 module.exports = {
+	//jscs:disable
 	OFFSETS: [
 		[-1,-1], [0,-1], [1,-1],
 		[-1, 0],         [1, 0],
 		[-1, 1], [0, 1], [1, 1]
 	],
+	//jscs:enable
 
 	ORIENTATION: {
 		VERTICAL: 'V',
 		HORIZONTAL: 'H'
 	},
 
-	createEmptyTable: function(size) {
+	createEmptyTable: function (size) {
 		var arr = [],
-		  i;
+			i;
 
 		for (i = 0; i < size; i++) {
 			arr.push(new Array(size));
@@ -21,10 +23,10 @@ module.exports = {
 		return arr;
 	},
 
-	eachFieldAround: function(x, y, board, cb) {
-		this.OFFSETS.forEach(function(offset) {
+	eachFieldAround: function (x, y, board, cb) {
+		this.OFFSETS.forEach(function (offset) {
 			var _x = x + offset[0],
-			  _y = y + offset[1];
+				_y = y + offset[1];
 
 			// Out of range.
 			if (
@@ -38,10 +40,11 @@ module.exports = {
 		});
 	},
 
-	eachSegmentField: function(segment, cb) {
-		for (var i = 0; i < segment.size; i++) {
+	eachSegmentField: function (segment, cb) {
+		var i, x, y;
+
+		for (i = 0; i < segment.size; i++) {
 			// If it's a horizontal ship, we are going through X axis, otherwise - Y.
-			var x, y;
 
 			if (segment.orientation == this.ORIENTATION.HORIZONTAL) {
 				x = segment.x + i;
@@ -52,13 +55,13 @@ module.exports = {
 			}
 
 			// Terminate when callback returns false.
-			if(cb(x, y) === false) {
+			if (cb(x, y) === false) {
 				return;
 			}
 		}
 	},
 
-	getFieldPositionInSegment: function(segment, x, y) {
+	getFieldPositionInSegment: function (segment, x, y) {
 		if (segment.orientation === this.ORIENTATION.HORIZONTAL) {
 			return x - segment.x;
 		} else {

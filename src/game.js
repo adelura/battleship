@@ -2,9 +2,8 @@
 
 var utils = require('./utils'),
 	board = require('./board'),
-	game = {};
-
-var BOARD_SIDE = 10,
+	game = {},
+	BOARD_SIDE = 10,
 	FIELD_NAMES_MAP = 'ABCDEFGHIJ',
 
 	ships = [5, 4, 4],
@@ -12,7 +11,7 @@ var BOARD_SIDE = 10,
 
 table = board.createEmptyTable(BOARD_SIDE);
 
-ships = ships.map(function(shipSize) {
+ships = ships.map(function (shipSize) {
 	var ship;
 
 	do {
@@ -28,7 +27,7 @@ ships = ships.map(function(shipSize) {
 	// 3 O O O O O
 	// 4 O O O O O
 
-	board.eachSegmentField(ship, function(x, y) {
+	board.eachSegmentField(ship, function (x, y) {
 		table[x][y] = ship;
 
 		// ...and ship rim
@@ -38,7 +37,7 @@ ships = ships.map(function(shipSize) {
 		// 2 O O O O O
 		// 3 O O O O O
 		// 4 O O O O O
-		board.eachFieldAround(x, y, table, function(x, y) {
+		board.eachFieldAround(x, y, table, function (x, y) {
 			if (typeof table[x][y] !== 'object') {
 				table[x][y] = true;
 			}
@@ -51,7 +50,7 @@ ships = ships.map(function(shipSize) {
 function checkShipField(segment, table) {
 	var result = true;
 
-	board.eachSegmentField(segment, function(x, y) {
+	board.eachSegmentField(segment, function (x, y) {
 		var field = table[x][y];
 
 		// Checking whether one of ship field in on another ship.
@@ -60,7 +59,7 @@ function checkShipField(segment, table) {
 			return false;
 		}
 
-		board.eachFieldAround(x, y, table, function(x, y) {
+		board.eachFieldAround(x, y, table, function (x, y) {
 			var row = table[x];
 
 			// Checking whether in ship rim there is an another ship.
@@ -75,8 +74,8 @@ function checkShipField(segment, table) {
 }
 
 function getRandomShip(shipSize) {
-	var maxStartPos = BOARD_SIDE - shipSize;
-	var orientation = utils.getRandomInt(0, 1) === 1 ? board.ORIENTATION.HORIZONTAL : board.ORIENTATION.VERTICAL;
+	var maxStartPos = BOARD_SIDE - shipSize,
+		orientation = utils.getRandomInt(0, 1) === 1 ? board.ORIENTATION.HORIZONTAL : board.ORIENTATION.VERTICAL;
 
 	// For table with side equals to 5, and horizontal ship with width of 4
 	// there are only two columns possible to start ship. With offset 0 and 1.
@@ -102,7 +101,7 @@ function getRandomShip(shipSize) {
 
 function getSunkenShipsAmount(ships) {
 	var max = ships.length,
-	  sunken = 0;
+		sunken = 0;
 
 	while (max--) {
 		if (ships[max].sunken) {
@@ -115,15 +114,17 @@ function getSunkenShipsAmount(ships) {
 
 function hit(x, y) {
 	var row = table[x],
-		field = row ? row[y] : undefined;
+		field = row ? row[y] : undefined,
+		ship,
+		fieldPositionInShip;
 
 	if (typeof field !== 'object') {
 		console.log('Nope, not this time!');
 		return;
 	}
 
-	var ship = field;
-	var fieldPositionInShip = board.getFieldPositionInSegment(ship, x, y);
+	ship = field;
+	fieldPositionInShip = board.getFieldPositionInSegment(ship, x, y);
 
 	if (ship.hits.indexOf(fieldPositionInShip) !== -1) {
 		console.log('You hit it already!');
@@ -144,7 +145,7 @@ function hit(x, y) {
 	}
 }
 
-game.hit = function(pos) {
+game.hit = function (pos) {
 	hit(FIELD_NAMES_MAP.indexOf(pos[0].toUpperCase()), pos[1] - 1);
 };
 
