@@ -28,7 +28,7 @@ ships = ships.map(function(shipSize) {
 	// 3 O O O O O
 	// 4 O O O O O
 
-	board.eachSegmentField(ship, table, function(field, x, y) {
+	board.eachSegmentField(ship, function(x, y) {
 		table[x][y] = ship;
 
 		// ...and ship rim
@@ -51,7 +51,9 @@ ships = ships.map(function(shipSize) {
 function checkShipField(segment, table) {
 	var result = true;
 
-	board.eachSegmentField(segment, table, function(field, x, y) {
+	board.eachSegmentField(segment, function(x, y) {
+		var field = table[x][y];
+
 		// Checking whether one of ship field in on another ship.
 		if (typeof field === 'object') {
 			result = false;
@@ -143,7 +145,7 @@ function hit(x, y) {
 }
 
 game.hit = function(pos) {
-	hit(FIELD_NAMES_MAP.indexOf(pos[0]), pos[1] - 1);
+	hit(FIELD_NAMES_MAP.indexOf(pos[0].toUpperCase()), pos[1] - 1);
 };
 
 module.exports = game;

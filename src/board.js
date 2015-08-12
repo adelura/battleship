@@ -38,7 +38,7 @@ module.exports = {
 		});
 	},
 
-	eachSegmentField: function(segment, board, cb) {
+	eachSegmentField: function(segment, cb) {
 		for (var i = 0; i < segment.size; i++) {
 			// If it's a horizontal ship, we are going through X axis, otherwise - Y.
 			var x, y;
@@ -52,7 +52,7 @@ module.exports = {
 			}
 
 			// Terminate when callback returns false.
-			if(cb(board[x][y], x, y) === false) {
+			if(cb(x, y) === false) {
 				return;
 			}
 		}
