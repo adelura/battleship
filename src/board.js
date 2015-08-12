@@ -115,9 +115,9 @@ module.exports = {
 	// 4 [ ] [ ] [ ] [ ]
 	//
 	// Above there is a segment with x equals to 1,
-	// x equals to 1, size of 3 and horizontal orientation.
+	// y equals to 1, size of 3 and horizontal orientation.
 	// x and y will be here a starting point B2.
-	createSegment: function(x, y, size, orientation) {
+	createSegment: function (x, y, size, orientation) {
 		return {
 			x: x,
 			y: y,
