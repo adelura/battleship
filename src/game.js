@@ -39,17 +39,8 @@ ships = ships.map(function(shipSize) {
 		// 3 O O O O O
 		// 4 O O O O O
 		board.eachFieldAround(x, y, table, function(x, y) {
-			var row = table[x];
-
-			if (
-				x < 0 || x >= table.length ||
-				y < 0 || y >= table.length
-			) {
-				return;
-			}
-
-			if (typeof row[y] !== 'object') {
-				row[y] = true;
+			if (typeof table[x][y] !== 'object') {
+				table[x][y] = true;
 			}
 		});
 	});
@@ -107,6 +98,19 @@ function getRandomShip(shipSize) {
 	};
 }
 
+function getSunkenShipsAmount(ships) {
+	var max = ships.length,
+	  sunken = 0;
+
+	while (max--) {
+		if (ships[max].sunken) {
+			sunken++;
+		}
+	}
+
+	return sunken;
+}
+
 function hit(x, y) {
 	var row = table[x],
 		field = row ? row[y] : undefined;
@@ -132,16 +136,7 @@ function hit(x, y) {
 		console.log('You sink a ship, well done!');
 	}
 
-	var max = ships.length,
-		sunken = 0;
-
-	while (max--) {
-		if (ships[max].sunken) {
-			sunken++;
-		}
-	}
-
-	if (sunken >= ships.length) {
+	if (getSunkenShipsAmount(ships) >= ships.length) {
 		game.over = true;
 		console.log('End of game!');
 	}

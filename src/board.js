@@ -26,6 +26,14 @@ module.exports = {
 			var _x = x + offset[0],
 			  _y = y + offset[1];
 
+			// Out of range.
+			if (
+				_x < 0 || _x >= board.length ||
+				_y < 0 || _y >= board.length
+			) {
+				return;
+			}
+
 			cb(_x, _y, board);
 		});
 	},
