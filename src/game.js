@@ -73,6 +73,7 @@ function checkShipField(segment, table) {
 	return result;
 }
 
+// @TODO: This function might be a part of board module.
 function getRandomShip(shipSize) {
 	var maxStartPos = BOARD_SIDE - shipSize,
 		orientation = utils.getRandomInt(0, 1) === 1 ? board.ORIENTATION.HORIZONTAL : board.ORIENTATION.VERTICAL;
@@ -80,14 +81,14 @@ function getRandomShip(shipSize) {
 	// For table with side equals to 5, and horizontal ship with width of 4
 	// there are only two columns possible to start ship. With offset 0 and 1.
 	// All rows are available - offset with range from 0 to 4.
-	// O - available     X - unavailable
+	// [+] - available     [-] - unavailable
 
-	//   0 1 2 3 4
-	// 0 O O X X X
-	// 1 O O X X X
-	// 2 O O X X X
-	// 3 O O X X X
-	// 4 O O X X X
+	//    A   B   C   D   E
+	// 1 [+] [+] [-] [-] [-]
+	// 2 [+] [+] [-] [-] [-]
+	// 3 [+] [+] [-] [-] [-]
+	// 4 [+] [+] [-] [-] [-]
+	// 5 [+] [+] [-] [-] [-]
 
 	return {
 		x: utils.getRandomInt(0, orientation === board.ORIENTATION.HORIZONTAL ? maxStartPos : BOARD_SIDE - 1),

@@ -1,5 +1,6 @@
 module.exports = {
 	//jscs:disable
+	// Eight directions.
 	OFFSETS: [
 		[-1,-1], [0,-1], [1,-1],
 		[-1, 0],         [1, 0],
@@ -12,6 +13,7 @@ module.exports = {
 		HORIZONTAL: 'H'
 	},
 
+	// Will create two dimensional table.
 	createEmptyTable: function (size) {
 		var arr = [],
 			i;
@@ -23,7 +25,20 @@ module.exports = {
 		return arr;
 	},
 
+	// Will execute `cb` function for each field around one.
+	//
+	//    A   B   C   D
+	// 1 [O] [O] [ ] [ ]
+	// 2 [X] [O] [ ] [ ]
+	// 3 [O] [O] [ ] [ ]
+	// 4 [ ] [ ] [ ] [ ]
+	//
+	// Let's say that we got field at point A2 (one with X haracter)
+	// callback function is going to be executed with all fields dimensions around
+	// i.e. A1, B1, B2, B3, A3
+
 	eachFieldAround: function (x, y, board, cb) {
+		// @TODO: get rid of `this`
 		this.OFFSETS.forEach(function (offset) {
 			var _x = x + offset[0],
 				_y = y + offset[1];
@@ -40,12 +55,24 @@ module.exports = {
 		});
 	},
 
+	// Will execute `cb` function for each segment field.
+	//
+	//    A   B   C   D
+	// 1 [ ] [X] [ ] [ ]
+	// 2 [ ] [X] [ ] [ ]
+	// 3 [ ] [X] [ ] [ ]
+	// 4 [ ] [ ] [ ] [ ]
+	//
+	// Let's say we have **vertical** segment with starting point **B1** with size of 3,
+	// callback function is going to be executed with all fields in a segment
+	// i.e. B1, B2, B3
 	eachSegmentField: function (segment, cb) {
 		var i, x, y;
 
 		for (i = 0; i < segment.size; i++) {
 			// If it's a horizontal ship, we are going through X axis, otherwise - Y.
 
+			// @TODO: get rid of `this`
 			if (segment.orientation == this.ORIENTATION.HORIZONTAL) {
 				x = segment.x + i;
 				y = segment.y;
