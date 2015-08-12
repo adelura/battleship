@@ -150,7 +150,10 @@ function hit(x, y) {
 }
 
 game.hit = function (pos) {
-	hit(FIELD_NAMES_MAP.indexOf(pos[0].toUpperCase()), pos[1] - 1);
+	var x = FIELD_NAMES_MAP.indexOf(pos[0].toUpperCase()),
+		y = pos.substr(1) - 1;
+
+	hit(x, y);
 };
 
 module.exports = game;
