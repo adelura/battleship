@@ -1,22 +1,16 @@
-window.game = (function () {
+var utils = require('./src/utils'),
+	board = require('./src/board');
+
+(function () {
 	'use strict';
 
 	var BOARD_SIDE = 10,
 		FIELD_NAMES_MAP = 'ABCDEFGHIJ',
-		ORIENTATION = {
-			VERTICAL: 'V',
-			HORIZONTAL: 'H'
-		},
-		OFFSETS = [
-			[-1,-1], [0,-1], [1,-1],
-			[-1, 0],         [1, 0],
-			[-1, 1], [0, 1], [1, 1]
-		],
 
 		ships = [5, 4, 4],
 		table;
 
-	table = createEmptyTable(BOARD_SIDE);
+	table = board.createEmptyTable(BOARD_SIDE);
 
 	ships = ships.map(function(shipSize) {
 		var ship;
@@ -34,7 +28,7 @@ window.game = (function () {
 		// 3 O O O O O
 		// 4 O O O O O
 
-		eachShipField(ship, table, function(field, x, y) {
+		board.eachSegmentField(ship, table, function(field, x, y) {
 			table[x][y] = ship;
 
 			// ...and ship rim
@@ -44,7 +38,7 @@ window.game = (function () {
 			// 2 O O O O O
 			// 3 O O O O O
 			// 4 O O O O O
-			eachFieldAround(x, y, table, function(x, y) {
+			board.eachFieldAround(x, y, table, function(x, y) {
 				var row = table[x];
 
 				if (
@@ -63,54 +57,17 @@ window.game = (function () {
 		return ship;
 	});
 
-	function eachFieldAround(x, y, table, cb) {
-		OFFSETS.forEach(function(offset) {
-			var _x = x + offset[0],
-				_y = y + offset[1];
-
-			cb(_x, _y, table);
-		});
-	}
-
-	function eachShipField(ship, table, cb) {
-		for (var i = 0; i < ship.size; i++) {
-			// If it's a horizontal ship, we are going through X axis, otherwise - Y.
-			var x, y;
-
-			if (ship.orientation == ORIENTATION.HORIZONTAL) {
-				x = ship.x + i;
-				y = ship.y;
-			} else {
-				x = ship.x;
-				y = ship.y + i;
-			}
-
-			// Terminate when callback returns false.
-			if(cb(table[x][y], x, y) === false) {
-				return;
-			}
-		}
-	}
-
-	function getFieldPositionInShip(ship, x, y) {
-		if (ship.orientation === ORIENTATION.HORIZONTAL) {
-			return x - ship.x;
-		} else {
-			return y - ship.y;
-		}
-	}
-
-	function checkShipField(ship, table) {
+	function checkShipField(segment, table) {
 		var result = true;
 
-		eachShipField(ship, table, function(field, x, y) {
+		board.eachSegmentField(segment, table, function(field, x, y) {
 			// Checking whether one of ship field in on another ship.
 			if (typeof field === 'object') {
 				result = false;
 				return false;
 			}
 
-			eachFieldAround(x, y, table, function(x, y) {
+			board.eachFieldAround(x, y, table, function(x, y) {
 				var row = table[x];
 
 				// Checking whether in ship rim there is an another ship.
@@ -126,7 +83,7 @@ window.game = (function () {
 
 	function getRandomShip(shipSize) {
 		var maxStartPos = BOARD_SIDE - shipSize;
-		var orientation = getRandomInt(0, 1) === 1 ? ORIENTATION.HORIZONTAL : ORIENTATION.VERTICAL;
+		var orientation = utils.getRandomInt(0, 1) === 1 ? board.ORIENTATION.HORIZONTAL : board.ORIENTATION.VERTICAL;
 
 		// For table with side equals to 5, and horizontal ship with width of 4
 		// there are only two columns possible to start ship. With offset 0 and 1.
@@ -141,8 +98,8 @@ window.game = (function () {
 		// 4 O O X X X
 
 		return {
-			x: getRandomInt(0, orientation === ORIENTATION.HORIZONTAL ? maxStartPos : BOARD_SIDE - 1),
-			y: getRandomInt(0, orientation === ORIENTATION.VERTICAL ? maxStartPos : BOARD_SIDE - 1),
+			x: utils.getRandomInt(0, orientation === board.ORIENTATION.HORIZONTAL ? maxStartPos : BOARD_SIDE - 1),
+			y: utils.getRandomInt(0, orientation === board.ORIENTATION.VERTICAL ? maxStartPos : BOARD_SIDE - 1),
 			size: shipSize,
 			hits: [],
 			orientation: orientation,
@@ -160,7 +117,7 @@ window.game = (function () {
 		}
 
 		var ship = field;
-		var fieldPositionInShip = getFieldPositionInShip(ship, x, y);
+		var fieldPositionInShip = table.getFieldPositionInSegment(ship, x, y);
 
 		if (ship.hits.indexOf(fieldPositionInShip) !== -1) {
 			console.log('You hit it already!');
@@ -187,23 +144,6 @@ window.game = (function () {
 		if (sunken >= ships.length) {
 			console.log('End of game!');
 		}
-	}
-
-	// Utils.
-	function createEmptyTable(size) {
-		var arr = [],
-			i;
-
-		for (i = 0; i < size; i++) {
-			arr.push(new Array(size));
-		}
-
-		return arr;
-	}
-
-	// Utils.
-	function getRandomInt(min, max) {
-		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
 
 	return {
