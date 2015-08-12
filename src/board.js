@@ -88,11 +88,41 @@ module.exports = {
 		}
 	},
 
+	// Function will return index of a point in a segment.
+	//
+	//    A   B   C   D
+	// 1 [ ] [ ] [ ] [ ]
+	// 2 [ ] [X] [X] [X]
+	// 3 [ ] [ ] [ ] [ ]
+	// 4 [ ] [ ] [ ] [ ]
+	//
+	// For point D2 it will returns 2 which is last index.
+	// For point B2 - index 0.
 	getFieldPositionInSegment: function (segment, x, y) {
 		if (segment.orientation === this.ORIENTATION.HORIZONTAL) {
 			return x - segment.x;
 		} else {
 			return y - segment.y;
 		}
+	},
+
+	// Function creates segment which we can imagine as some kind of vector.
+	//
+	//    A   B   C   D
+	// 1 [ ] [ ] [ ] [ ]
+	// 2 [ ] [X] [X] [X]
+	// 3 [ ] [ ] [ ] [ ]
+	// 4 [ ] [ ] [ ] [ ]
+	//
+	// Above there is a segment with x equals to 1,
+	// x equals to 1, size of 3 and horizontal orientation.
+	// x and y will be here a starting point B2.
+	createSegment: function(x, y, size, orientation) {
+		return {
+			x: x,
+			y: y,
+			size: size,
+			orientation: orientation
+		};
 	}
 };
